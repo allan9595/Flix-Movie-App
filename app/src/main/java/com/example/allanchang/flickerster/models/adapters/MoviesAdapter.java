@@ -1,7 +1,9 @@
 package com.example.allanchang.flickerster.models.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Parcel;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -9,11 +11,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
+import com.example.allanchang.flickerster.DetailActivity;
 import com.example.allanchang.flickerster.R;
 import com.example.allanchang.flickerster.models.Movie;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -52,6 +61,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         TextView tvTitle;
         TextView tvOverview;
         ImageView ivPoster;
+        RelativeLayout container;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -59,9 +69,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvOverview = itemView.findViewById(R.id.tvOverview);
             ivPoster = itemView.findViewById(R.id.ivPoster);
+            container = itemView.findViewById(R.id.container);
         }
 
-        public void bind(Movie movie) {
+        public void bind(final Movie movie) {
 
 
             tvTitle.setText(movie.getTitle());
@@ -72,6 +83,15 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
                 imageURL = movie.getBackdropPath();
             }
             Glide.with(context).load(imageURL).into(ivPoster);
+            container.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view){
+                    Intent i = new Intent(context, DetailActivity.class);
+                    i.putExtra("movie",Parcels.wrap(movie));
+                    context.startActivity(i);
+                }
+            });
+
         }
     }
 }
